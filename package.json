@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "skillifymd",
+  "private": true,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skillifymd/skillifymd.git"
+  },
+  "workspaces": [
+    "packages/*",
+    "site"
+  ],
+  "scripts": {
+    "build": "bun run --cwd packages/opencode build && bun run --cwd site build",
+    "test": "bun run --cwd packages/opencode test",
+    "check": "bun run --cwd packages/opencode check && bun run --cwd site check"
+  }
+}
