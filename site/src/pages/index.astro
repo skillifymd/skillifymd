@@ -1,0 +1,334 @@
+---
+import { siGithub, siNpm } from "simple-icons"
+
+import ThemeToggle from "@/components/ThemeToggle.astro"
+import SiteLayout from "@/layouts/SiteLayout.astro"
+import { meta } from "@/site/meta"
+
+const url = new URL("/", meta.site).toString()
+const logo = new URL(meta.logo, meta.site).toString()
+const socialImage = new URL(meta.socialImage, meta.site).toString()
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${url}#organization`,
+      name: meta.organizationName,
+      url,
+      logo: {
+        "@type": "ImageObject",
+        url: logo,
+      },
+      sameAs: [meta.github, meta.npm],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${url}#website`,
+      url,
+      name: meta.name,
+      description: meta.description,
+      inLanguage: meta.language,
+      publisher: {
+        "@id": `${url}#organization`,
+      },
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": `${url}#software`,
+      name: meta.packageName,
+      url,
+      description: meta.description,
+      codeRepository: meta.github,
+      downloadUrl: meta.npm,
+      programmingLanguage: "TypeScript",
+      license: `${meta.github}/blob/main/site/LICENSE`,
+      publisher: {
+        "@id": `${url}#organization`,
+      },
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${url}#webpage`,
+      url,
+      name: meta.title,
+      description: meta.description,
+      inLanguage: meta.language,
+      isPartOf: {
+        "@id": `${url}#website`,
+      },
+      about: {
+        "@id": `${url}#software`,
+      },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: socialImage,
+      },
+    },
+  ],
+}
+
+const installConfigs = [
+  {
+    id: "opencode",
+    label: "OpenCode",
+    path: "~/.config/opencode/opencode.json",
+    copyText: `{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["@skillifymd/opencode"]
+}`,
+    htmlLines: [
+      `<span class="punctuation">{</span>`,
+      `  <span class="property">"$schema"</span><span class="punctuation">:</span> <span class="string">"https://opencode.ai/config.json"</span><span class="punctuation">,</span>`,
+      `  <span class="property">"plugin"</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">"@skillifymd/opencode"</span><span class="punctuation">]</span>`,
+      `<span class="punctuation">}</span>`,
+    ],
+  },
+  {
+    id: "codex-cli",
+    label: "Codex CLI",
+    path: "~/.agents/plugins/marketplace.json",
+    copyText: `{
+  "name": "skillify-local",
+  "plugins": [
+    {
+      "name": "skillify",
+      "source": {
+        "source": "local",
+        "path": "./.codex/plugins/skillify"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}`,
+    htmlLines: [
+      `<span class="punctuation">{</span>`,
+      `  <span class="property">"name"</span><span class="punctuation">:</span> <span class="string">"skillify-local"</span><span class="punctuation">,</span>`,
+      `  <span class="property">"plugins"</span><span class="punctuation">:</span> <span class="punctuation">[</span>`,
+      `    <span class="punctuation">{</span>`,
+      `      <span class="property">"name"</span><span class="punctuation">:</span> <span class="string">"skillify"</span><span class="punctuation">,</span>`,
+      `      <span class="property">"source"</span><span class="punctuation">:</span> <span class="punctuation">{</span>`,
+      `        <span class="property">"source"</span><span class="punctuation">:</span> <span class="string">"local"</span><span class="punctuation">,</span>`,
+      `        <span class="property">"path"</span><span class="punctuation">:</span> <span class="string">"./.codex/plugins/skillify"</span>`,
+      `      <span class="punctuation">}</span><span class="punctuation">,</span>`,
+      `      <span class="property">"policy"</span><span class="punctuation">:</span> <span class="punctuation">{</span>`,
+      `        <span class="property">"installation"</span><span class="punctuation">:</span> <span class="string">"AVAILABLE"</span><span class="punctuation">,</span>`,
+      `        <span class="property">"authentication"</span><span class="punctuation">:</span> <span class="string">"ON_INSTALL"</span>`,
+      `      <span class="punctuation">}</span><span class="punctuation">,</span>`,
+      `      <span class="property">"category"</span><span class="punctuation">:</span> <span class="string">"Productivity"</span>`,
+      `    <span class="punctuation">}</span>`,
+      `  <span class="punctuation">]</span>`,
+      `<span class="punctuation">}</span>`,
+    ],
+  },
+] as const
+
+const sessionLines = [
+  `<span class="comment">/skillify capture release checklist</span>`,
+  ``,
+  `Turn this session into a reusable skill.`,
+  `Focus on version bump, changelog, smoke test, and final approval.`,
+  ``,
+  `Drafting reusable skill...`,
+  `<span class="keyword">Saved skill</span> <span class="string">release-checklist</span>`,
+  `<span class="property">Skill</span>   .opencode/skills/release-checklist/SKILL.md`,
+  `<span class="property">Command</span> .opencode/commands/release-checklist.md`,
+  ``,
+  `<span class="string">Run it next time with /release-checklist.</span>`,
+]
+
+---
+
+<SiteLayout structuredData={structuredData}>
+  <nav slot="actions" class="nav icons">
+    <a class="repo" href={meta.github} aria-label="GitHub" target="_blank" rel="noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d={siGithub.path}></path>
+      </svg>
+      <span data-stars>...</span>
+    </a>
+    <a href={meta.npm} aria-label="npm" target="_blank" rel="noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d={siNpm.path}></path>
+      </svg>
+    </a>
+  </nav>
+
+  <ThemeToggle slot="actions" />
+
+  <button
+    slot="actions"
+    class="menu"
+    aria-label="Open navigation menu"
+    aria-expanded="false"
+    aria-controls="drawer"
+  >
+    <svg class="menuicon" viewBox="0 0 24 24" fill="currentColor">
+      <rect x="5" y="8" width="14" height="2"></rect>
+      <rect x="5" y="14" width="14" height="2"></rect>
+    </svg>
+    <svg class="closeicon" viewBox="0 0 24 24" fill="currentColor">
+      <rect x="5" y="11" width="14" height="2" transform="rotate(45 12 12)"></rect>
+      <rect x="5" y="11" width="14" height="2" transform="rotate(-45 12 12)"></rect>
+    </svg>
+  </button>
+
+  <nav slot="drawer" class="drawer" id="drawer">
+    <a href={meta.github} target="_blank" rel="noreferrer">GitHub</a>
+    <a href={meta.npm} target="_blank" rel="noreferrer">npm</a>
+  </nav>
+
+  <div class="main">
+    <section class="hero">
+      <div class="intro">
+        <h1>Plan. Build. <span class="accentmark">Repeat.</span></h1>
+        <p class="sub">
+          {meta.description}
+        </p>
+
+        <a class="cta" href={meta.github} target="_blank" rel="noreferrer">
+          <span>View on GitHub</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M7 17L17 7"></path>
+            <path d="M9 7H17V15"></path>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="terminal" id="install" aria-label="Install example">
+      <div class="window configswitcher" data-config-switcher>
+        <div class="windowbar">
+          <div class="tabs" role="tablist" aria-label="Config files">
+            {installConfigs.map((entry, index) => (
+              <button
+                class:list={["tab", index === 0 && "is-active"]}
+                type="button"
+                role="tab"
+                id={`config-tab-${entry.id}`}
+                aria-controls={`config-panel-${entry.id}`}
+                aria-selected={index === 0 ? "true" : "false"}
+                tabindex={index === 0 ? "0" : "-1"}
+                data-config-tab={entry.id}
+                data-copy={entry.copyText}
+              >
+                {entry.label}
+              </button>
+            ))}
+          </div>
+
+          <button class="copyaction" aria-label="Copy config" data-config-copy data-copy={installConfigs[0].copyText}>
+            <span class="copybtn">
+              <svg
+                class="copyicon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path
+                  d="M8.75 8.75V2.75H21.25V15.25H15.25M15.25 8.75H2.75V21.25H15.25V8.75Z"
+                  stroke-linecap="square"
+                ></path>
+              </svg>
+              <svg
+                class="checkicon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M2.75 15.0938L9 20.25L21.25 3.75" stroke-linecap="square"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        {installConfigs.map((entry, index) => (
+          <div
+            class:list={["configpanel", index === 0 && "is-active"]}
+            id={`config-panel-${entry.id}`}
+            role="tabpanel"
+            aria-labelledby={`config-tab-${entry.id}`}
+            data-config-panel={entry.id}
+            hidden={index === 0 ? undefined : true}
+          >
+            <div class="windowbody">
+              <div class="pane">
+                <div class="gutter">
+                  {entry.htmlLines.map((_, lineIndex) => <span>{lineIndex + 1}</span>)}
+                </div>
+                <pre><code set:html={entry.htmlLines.join("\n")}></code></pre>
+              </div>
+            </div>
+
+            <div class="vi" aria-label="vi status bar">
+              <div class="viline">"{entry.path}" {entry.htmlLines.length} lines</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section story" aria-labelledby="what-is-skillify">
+      <div class="copy">
+        <h2 id="what-is-skillify">What is Skillify?</h2>
+        <p>
+          Skillify helps engineering teams and individual developers capture high-signal AI coding
+          workflows, then reuse them as structured skills and slash commands instead of rewriting
+          the same instructions in every session.
+        </p>
+        <p>
+          Use it for release checklists, bug triage, code review prompts, refactoring workflows,
+          and other repeatable development tasks that benefit from consistent guidance.
+        </p>
+      </div>
+    </section>
+
+    <section class="editor">
+      <div class="pane">
+        <div class="gutter">
+          {sessionLines.map((_, index) => <span>{index + 1}</span>)}
+        </div>
+        <pre><code set:html={sessionLines.join("\n")}></code></pre>
+      </div>
+    </section>
+
+    <section class="section story" aria-labelledby="why-skillify">
+      <div class="copy">
+        <h2 id="why-skillify">Why reusable skills <span class="accentunderline">matter.</span></h2>
+        <p>
+          Reusable skills reduce prompt drift, improve consistency across contributors, and make it
+          easier to standardize how your team handles shipping, review, debugging, and maintenance
+          workflows.
+        </p>
+      </div>
+    </section>
+
+    <section class="section ctaband" aria-labelledby="cta-title">
+      <div class="banner">
+        <h2 id="cta-title">Up and running in seconds.</h2>
+
+        <div class="banneractions">
+          <a class="bannercta primary" href="#install">Install</a>
+          <a class="bannercta" href={meta.github} target="_blank" rel="noreferrer">
+            <span>View on GitHub</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M7 17L17 7"></path>
+              <path d="M9 7H17V15"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    import "@/site/home.ts"
+  </script>
+</SiteLayout>
