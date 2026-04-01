@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@skillifymd/opencode",
+  "version": "0.1.0",
+  "description": "Skillify for OpenCode: turn sessions into reusable .opencode skills.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skillifymd/skillifymd.git",
+    "directory": "packages/opencode"
+  },
+  "homepage": "https://github.com/skillifymd/skillifymd/tree/main/packages/opencode",
+  "bugs": {
+    "url": "https://github.com/skillifymd/skillifymd/issues"
+  },
+  "main": "./dist/server.js",
+  "exports": {
+    ".": "./dist/server.js",
+    "./server": "./dist/server.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/server.js",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "bun build --target=node ./src/server.ts --outfile ./dist/server.js",
+    "test": "bun test",
+    "check": "bunx tsc --noEmit",
+    "prepack": "bun run build"
+  },
+  "engines": {
+    "opencode": ">=1.3.13 <2"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.3.13"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.0"
+  }
+}
