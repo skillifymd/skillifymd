@@ -1,0 +1,37 @@
+{
+  "name": "@skillifymd/site",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Marketing site for skillify.md.",
+  "packageManager": "bun@1.3.9",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skillifymd/skillifymd.git",
+    "directory": "site"
+  },
+  "homepage": "https://skillify.md",
+  "bugs": {
+    "url": "https://github.com/skillifymd/skillifymd/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "check": "astro check",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^6.1.2",
+    "simple-icons": "^16.14.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.8",
+    "sass": "^1.98.0",
+    "typescript": "^6.0.2"
+  }
+}
