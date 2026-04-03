@@ -1,0 +1,10 @@
+node_modules
+dist
+.astro
+*.log
+.env
+.env.*
+!.env.example
+Dockerfile
+.dockerignore
+README*
